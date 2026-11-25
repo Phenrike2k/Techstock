@@ -166,3 +166,64 @@ while opcao != "0":
 
     else:
         print("Opção inválida. Tente de novo.")
+        
+# REGISTRO ETAPA 3
+# 1) len(produtos) mede quantos produtos diferentes estão cadastrados.
+# 2) usamos indice + 1 porque o índice começa em 0 e para o usuário a numeração começa em 1.
+# 3) usamos numero - 1 porque o usuário digita a partir de 1, mas a lista no Python começa no índice 0.
+# 4) consegui testar a listagem numerada, o aviso de SEM ESTOQUE, o contador de menos de 5 unidades e a consulta pela posição.
+
+produtos = []
+
+# listagem numerada
+if not produtos:
+    print("Nenhum produto cadastrado.")
+else:
+    print("\n=== PRODUTOS CADASTRADOS ===")
+    for indice in range(len(produtos)):
+        produto = produtos[indice]
+        situacao = ""
+        if produto["quantidade"] == 0:
+            situacao = " | SEM ESTOQUE"
+        print(
+            f'{indice + 1} {produto["nome"]} | '
+            f'Qtd: {produto["quantidade"]} | '
+            f'R$ {produto["preco"]}{situacao}'
+        )
+    print(f"Tipos de produtos: {len(produtos)}")
+    baixo = 0
+    for indice in range(len(produtos)):
+        if produtos[indice]["quantidade"] < 5:
+            baixo = baixo + 1
+    print("Produtos com menos de 5 unidades:", baixo)
+
+# consultar pela posição
+if not produtos:
+    print("Nenhum produto cadastrado.")
+else:
+    print("\n=== PRODUTOS CADASTRADOS ===")
+    for indice in range(len(produtos)):
+        produto = produtos[indice]
+        situacao = ""
+        if produto["quantidade"] == 0:
+            situacao = " | SEM ESTOQUE"
+        print(
+            f'{indice + 1} {produto["nome"]} | '
+            f'Qtd: {produto["quantidade"]} | '
+            f'R$ {produto["preco"]}{situacao}'
+        )
+    print(f"Tipos de produtos: {len(produtos)}")
+    texto = input("Digite o número do produto: ")
+    if not texto.isdigit():
+        print("Digite um número inteiro válido.")
+    else:
+        numero = int(texto)
+        if numero < 1 or numero > len(produtos):
+            print("Produto fora da lista.")
+        else:
+            produto = produtos[numero - 1]
+            print(f'Produto: {produto["nome"]}')
+            print(f'Quantidade: {produto["quantidade"]}')
+            print(f'Preço: R$ {produto["preco"]}')
+            total = produto["quantidade"] * produto["preco"]
+            print(f"Valor total: R$ {total}")
