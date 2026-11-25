@@ -175,10 +175,10 @@ while opcao != "0":
 
 produtos = []
 
-# listagem numerada
-if not produtos:
-    print("Nenhum produto cadastrado.")
-else:
+def listar():
+    if not produtos:
+        print("Nenhum produto cadastrado.")
+        return
     print("\n=== PRODUTOS CADASTRADOS ===")
     for indice in range(len(produtos)):
         produto = produtos[indice]
@@ -188,7 +188,7 @@ else:
         print(
             f'{indice + 1} {produto["nome"]} | '
             f'Qtd: {produto["quantidade"]} | '
-            f'R$ {produto["preco"]}{situacao}'
+            f'R$ {produto["preco"]:.2f}{situacao}'
         )
     print(f"Tipos de produtos: {len(produtos)}")
     baixo = 0
@@ -197,33 +197,95 @@ else:
             baixo = baixo + 1
     print("Produtos com menos de 5 unidades:", baixo)
 
-# consultar pela posição
-if not produtos:
-    print("Nenhum produto cadastrado.")
-else:
-    print("\n=== PRODUTOS CADASTRADOS ===")
-    for indice in range(len(produtos)):
-        produto = produtos[indice]
-        situacao = ""
-        if produto["quantidade"] == 0:
-            situacao = " | SEM ESTOQUE"
-        print(
-            f'{indice + 1} {produto["nome"]} | '
-            f'Qtd: {produto["quantidade"]} | '
-            f'R$ {produto["preco"]}{situacao}'
-        )
-    print(f"Tipos de produtos: {len(produtos)}")
-    texto = input("Digite o número do produto: ")
-    if not texto.isdigit():
-        print("Digite um número inteiro válido.")
-    else:
-        numero = int(texto)
-        if numero < 1 or numero > len(produtos):
-            print("Produto fora da lista.")
+opcao = ""
+while opcao != "0":
+    print("============ MENU ============")
+    print("[1] Cadastrar produto")
+    print("[2] Listar produtos")
+    print("[10] Buscar produto por código")
+    print("[11] Atualizar dados do produto")
+    print("[12] Relatório geral do estoque")
+    print("[0] Sair")
+    opcao = input("Escolha uma opção: ")
+
+    if opcao == "1":
+        codigo = int(input("Código do produto: "))
+        codigo_existe = False
+        for produto in produtos:
+            if produto["codigo"] == codigo:
+                codigo_existe = True
+                break
+        if codigo_existe:
+            print("Código já cadastrado!")
         else:
-            produto = produtos[numero - 1]
-            print(f'Produto: {produto["nome"]}')
-            print(f'Quantidade: {produto["quantidade"]}')
-            print(f'Preço: R$ {produto["preco"]}')
-            total = produto["quantidade"] * produto["preco"]
-            print(f"Valor total: R$ {total}")
+            nome = input("Nome: ")
+            quantidade = int(input("Quantidade: "))
+            preco = float(input("Preço: "))
+            novo = {
+                "codigo": codigo,
+                "nome": nome,
+                "quantidade": quantidade,
+                "preco": preco
+            }
+            produtos.append(novo)
+            print("Produto cadastrado!")
+
+    elif opcao == "2":
+        listar()
+
+    elif opcao == "10":
+        codigo_busca = int(input("Código para buscar: "))
+        encontrado = None
+        for produto in produtos:
+            if produto["codigo"] == codigo_busca:
+                encontrado = produto
+                break
+        if encontrado is None:
+            print("Produto não encontrado.")
+        else:
+            print("Nome:", encontrado["nome"])
+            print("Quantidade:", encontrado["quantidade"])
+            print(f"Preço: R$ {encontrado['preco']:.2f}")
+            total = encontrado["quantidade"] * encontrado["preco"]
+            print(f"Valor total: R$ {total:.2f}")
+
+    elif opcao == "11":
+        codigo_busca = int(input("Código do produto: "))
+        encontrado = None
+        for produto in produtos:
+            if produto["codigo"] == codigo_busca:
+                encontrado = produto
+                break
+        if encontrado is None:
+            print("Produto não encontrado.")
+        else:
+            print("1 - Alterar nome")
+            print("2 - Alterar quantidade")
+            escolha = input("Escolha: ")
+            if escolha == "1":
+                encontrado["nome"] = input("Novo nome: ")
+                print("Nome atualizado!")
+            elif escolha == "2":
+                nova_qtd = int(input("Nova quantidade: "))
+                if nova_qtd < 0:
+                    print("Quantidade inválida!")
+                else:
+                    encontrado["quantidade"] = nova_qtd
+                    print("Quantidade atualizada!")
+            else:
+                print("Opção inválida.")
+
+    elif opcao == "12":
+        total_estoque = 0
+        print("====== RELATÓRIO GERAL ======")
+        for produto in produtos:
+            subtotal = produto["quantidade"] * produto["preco"]
+            total_estoque += subtotal
+            print(produto["codigo"], "-", produto["nome"])
+            print("Quantidade:", produto["quantidade"])
+            print(f"Preço unitário: R$ {produto['preco']:.2f}")
+            print(f"Subtotal: R$ {subtotal:.2f}")
+        print(f"Total do estoque: R$ {total_estoque:.2f}")
+
+    elif opcao == "0":
+        print("Saindo do TechStock...")
