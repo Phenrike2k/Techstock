@@ -1,5 +1,5 @@
 # ============================================
-# TechStock 6.0 Extra - Controle de estoque TechPoint
+# TechStock 6.0 - Controle de estoque TechPoint
 # Aluno(a): Paulo Henrique Martins
 # ============================================
 
