@@ -46,6 +46,7 @@ def exibir_menu():
     print("[10] Buscar produto por código")
     print("[11] Atualizar nome ou quantidade")
     print("[12] Relatório geral do estoque")
+    print("[17] Produtos com estoque baixo")
     print("[18] Desfazer última alteração")
     print("[19] Ver histórico")
     print("[20] Pedir reposição")
@@ -154,6 +155,26 @@ def listar():
         if produtos[indice]["quantidade"] < 5:
             baixo = baixo + 1
     print("Produtos com menos de 5 unidades:", baixo)
+
+
+# Lista os produtos cuja quantidade está abaixo do estoque mínimo.
+def listar_estoque_baixo():
+    if not produtos:
+        print("Nenhum produto cadastrado.")
+        return
+
+    encontrou = False
+    print("=== PRODUTOS COM ESTOQUE BAIXO ===")
+    for indice in range(len(produtos)):
+        produto = produtos[indice]
+        if produto["quantidade"] < produto["estoque_minimo"]:
+            print(f'{produto["codigo"]} - {produto["nome"]} | '
+                  f'Estoque: {produto["quantidade"]} | '
+                  f'Mínimo: {produto["estoque_minimo"]}')
+            encontrou = True
+
+    if not encontrou:
+        print("Nenhum produto com estoque baixo.")
 
 
 # Consulta um produto pela posição na lista e devolve seu dicionário.
@@ -498,6 +519,8 @@ while opcao != "0":
         atualizar_produto()
     elif opcao == "12":
         relatorio()
+    elif opcao == "17":
+        listar_estoque_baixo()
     elif opcao == "18":
         desfazer()
     elif opcao == "19":
